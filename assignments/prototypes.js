@@ -16,10 +16,10 @@
   * destroy() // prototype method that returns: `${this.name} was removed from the game.`
 */
 function GameObject(attributes) {
-  this.createdAt = new Date();
+  this.createdAt = attributes.createdAt;
   this.name = attributes.name;
   this.dimensions = attributes.dimensions;
-  // this.isHumanoid = humanoidattr.isHumanoid;
+
 
   // this.destroy = function () {
   //   return `${this.name} was removed from the game.`
@@ -79,7 +79,56 @@ Humanoid.prototype.greet = function() {
   * Instances of CharacterStats should have all of the same properties as GameObject.
 */
 
+/*
+ === Hero (Having powers that are great than an humanoid)
+*/
+
+function Hero(prop){
+  Humanoid.call(this, prop);
+  this.powers = prop.powers;
+  this.heroName = prop.heroName;
+  this.hasCape = prop.hasCape;
+  this.strength = prop.strength;
+}
+
+Hero.prototype.usePower = function() {
+  `${this.heroName} has applied ${this.power}`
+}
+
+Hero.prototype = Object.create(Humanoid.prototype);
 // Test you work by un-commenting these 3 objects and the list of console logs below:
+
+
+/*
+=== Villian (Having powers to try to destroy the world)
+*/
+Villain.prototype = Object.create(Humanoid.prototype);
+
+
+function Villain (prop) {
+  Humanoid.call(this, prop);
+  this.powers = prop.powers;
+  this.villainName = prop.villainName;
+  this.strength = prop.strength;
+  
+}
+
+Villain.prototype.attacked = function(nemesis) {
+  console.log(this.healthPoints)
+  for(let i = this.healthPoints; i > 1; i--){
+    console.log(i);
+    if(i == 2) {
+      return this.destroy();
+    }
+  }
+}
+
+//function that the his power was used.
+Villain.prototype.usePower = function(num) {
+  let power = this.powers[num];
+  return `${this.villainName} has applied ${this.powers}`
+}
+
 
 
   const mage = new Humanoid({
@@ -132,6 +181,40 @@ Humanoid.prototype.greet = function() {
     language: 'Elvish',
   });
 
+  ///HERO//////////////////////////
+  const flash = new Hero({
+    createdAt: new Date(),
+    dimensions: {
+      length: 1,
+      width: 2,
+      height: 4,
+    },
+    healthPoints: 12,
+    name: "Barry Allen",
+    heroName: "Flash",
+    team: "DC Comics",
+    language: "English",
+    hasCape: false,
+    powers: ["Speed"],
+    strength: 2,
+  })
+  //////VILLIAN//////////////////////
+  const captaincold = new Villain({
+    createdAt: new Date(),
+    dimensions: {
+      length: 1,
+      width: 2,
+      height: 4,
+    },
+    healthPoints: 10,
+    name: "Leonard Snart",
+    villainName: "Captian Cold",
+    team: "Rogues",
+    language: "English",
+    powers: ["cold beam", "cold field", "ice granade"],
+    strength: 2,
+  })
+
   console.log(mage.createdAt); // Today's date
   console.log(archer.dimensions); // { length: 1, width: 2, height: 4 }
   console.log(swordsman.healthPoints); // 15
@@ -143,8 +226,16 @@ Humanoid.prototype.greet = function() {
   console.log(mage.takeDamage()); // Bruce took damage.
   console.log(swordsman.destroy()); // Sir Mustachio was removed from the game.
 
+  
 
   // Stretch task: 
   // * Create Villain and Hero constructor functions that inherit from the Humanoid constructor function.  
   // * Give the Hero and Villains different methods that could be used to remove health points from objects which could result in destruction if health gets to 0 or drops below 0;
   // * Create two new objects, one a villain and one a hero and fight it out with methods!
+
+  ////////////HERO // VILLAIN///////////
+  console.log(flash.heroName);
+  console.log(captaincold.usePower())
+  console.log(captaincold.takeDamage())
+  console.log(captaincold.attacked())
+
