@@ -46,8 +46,12 @@ function CharacterStats(charAttributes) {
 
 CharacterStats.prototype = Object.create(GameObject.prototype);
 
-CharacterStats.prototype.takeDamage = function() {
-  return `${this.name} took damage.`
+CharacterStats.prototype.takeDamage = function(str) {
+  if(this.heroName) {
+    return `${this.heroName} took ${str} damage`
+  } else if (this.villainName) {
+    return `${this.villainName} took ${str} damage`
+  } else return `${this.name} took damage.`
 }
 
 /*
@@ -91,17 +95,20 @@ function Hero(prop){
   this.strength = prop.strength;
 }
 
-Hero.prototype.usePower = function() {
-  `${this.heroName} has applied ${this.power}`
-}
+//uses power toward villain
+// Hero.prototype.usePower = function(char,damage) {
+  
+//   return `${this.heroName} has applied ${damage} damage to ${char.villainName}`
+// }
 
 Hero.prototype = Object.create(Humanoid.prototype);
 // Test you work by un-commenting these 3 objects and the list of console logs below:
 
 
-/*
-=== Villian (Having powers to try to destroy the world)
-*/
+/*////////////////////////////////////////////////
+===================== Villian ===================
+  (Having powers to try to destroy the world)
+////////////////////////////////////////////////////*/
 Villain.prototype = Object.create(Humanoid.prototype);
 
 
@@ -113,22 +120,24 @@ function Villain (prop) {
   
 }
 
-Villain.prototype.attacked = function(nemesis) {
-  console.log(this.healthPoints)
-  for(let i = this.healthPoints; i > 1; i--){
-    console.log(i);
-    if(i == 2) {
-      return this.destroy();
-    }
-  }
-}
 
 //function that the his power was used.
-Villain.prototype.usePower = function(num) {
-  let power = this.powers[num];
-  return `${this.villainName} has applied ${this.powers}`
-}
+Villain.prototype.usePower = function(char, move) {
+  let movePower = this.powers[move];
+  let strength = this.strength;
+  //console.log(movePower);
+  char.healthPoints -= strength;
+  console.log(char.healthPoints);
+  let health = char.healthPoints;
 
+  
+
+
+  //console.log(`${this.villainName} has applied ${movePower} to ${char.heroName}`)
+  console.log(char.takeDamage(strength))
+
+  return `${this.villainName} has applied ${movePower} to ${char.heroName}`;
+}
 
 
   const mage = new Humanoid({
@@ -234,8 +243,11 @@ Villain.prototype.usePower = function(num) {
   // * Create two new objects, one a villain and one a hero and fight it out with methods!
 
   ////////////HERO // VILLAIN///////////
+  console.log(flash.healthPoints)
   console.log(flash.heroName);
-  console.log(captaincold.usePower())
-  console.log(captaincold.takeDamage())
-  console.log(captaincold.attacked())
+  console.log(captaincold.usePower(flash,0));
+  console.log(flash.healthPoints);
+  //console.log(flash.takeDamage())
+  
+  //console.log(captaincold.attacked(flash))
 
